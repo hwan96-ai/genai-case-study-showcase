@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>A08 — 연성대학교 입학상담 챗봇 백엔드 | GenAI 케이스 스터디 쇼케이스</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">본문 바로가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">GenAI 케이스 스터디 쇼케이스</span>
+    <nav class="nav" aria-label="페이지 이동">
+      <a href="../index.html">← 쇼케이스 홈</a>
+      <a href="#tracks">이중 RAG 트랙</a>
+      <a href="#limits">정직한 한계</a>
+    </nav>
+    <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드 전환">
+      <span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-text">다크 모드</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="tracks" aria-labelledby="a08-h">
+    <div class="card">
+      <div class="section-head">
+        <h2 id="a08-h">A08 — 연성대학교 입학상담 챗봇 + SAPiE 멀티테넌트 RAG 백엔드</h2>
+        <span class="badge badge-public">public-candidate</span>
+        <span class="badge badge-role">단독 설계·구현·운영 배포</span>
+      </div>
+      <p class="section-sub">카카오 i 채널로 연동된 연성대학교 입학상담 챗봇과 사내 SAPiE 멀티테넌트 챗봇 플랫폼의
+      FastAPI 백엔드 전체를 커밋 이력 기준 <strong>단독으로 설계·구현·운영</strong> —
+      트랙별로 다른 임베딩/벡터스토어 전략, HWP까지 포함한 테이블 인지 문서 파이프라인,
+      SSE 스트리밍·비용 추적 같은 운영 디테일을 갖춘 실제 대학 운영 RAG 서비스입니다.</p>
+
+      <h3>이중 RAG 트랙 <span class="h3-sub">— 같은 시스템 안에서 트랙별로 다른 임베딩·벡터스토어 전략</span></h3>
+      <div class="compare-grid">
+        <div class="compare-col">
+          <span class="compare-tag">연성대 트랙 — 단일 도메인 코퍼스</span>
+          <h4>VoyageAI <code>voyage-3-large</code> + FAISS MMR 검색</h4>
+          <ul>
+            <li>검색: FAISS <strong>MMR (k=3, fetch_k=20)</strong> — 단일 도메인 코퍼스에 검색 다양성 적용</li>
+            <li>입시 연도(2025/2026)에 강하게 묶인 질문 — Jinja2 도메인 프롬프트로 연도별 가이드 분기</li>
+            <li>2025→2026 입시 전환을 코드 수정이 아닌 프롬프트 계층 갱신으로 흡수</li>
+            <li>채널: 카카오 i (콜백 비동기 응답)</li>
+          </ul>
+        </div>
+        <div class="compare-col alt">
+          <span class="compare-tag">SAPiE 트랙 — 멀티테넌트</span>
+          <h4>Bedrock Titan + 사용자별 FAISS · S3 영속화</h4>
+          <ul>
+            <li>임베딩: Bedrock Titan → <strong>사용자(테넌트)별 FAISS 벡터스토어</strong></li>
+            <li><strong>S3 영속화 + 온디맨드 다운로드</strong> — 테넌트 격리와 인스턴스 무상태성을 동시에 확보</li>
+            <li>"문서만 올리면 자기만의 챗봇" — 업로드 문서 중간 페이지 텍스트로 샘플 질문 자동 생성(온보딩)</li>
+            <li>채널: 웹 클라이언트 SSE 스트리밍</li>
+          </ul>
+        </div>
+      </div>
+      <p class="flow-note">LLM은 두 트랙 공통: Bedrock <strong>Claude Sonnet 4</strong>(inference profile) 메인 +
+      Haiku 3.5 폴백/샘플링. 대화 상태는 MongoDB 이력(최근 10턴)을 LangChain 표준 대신
+      커스텀 chat history 클래스로 직접 제어.</p>
+
+      <h3>문서 인입 파이프라인 <span class="h3-sub">— 입시 요강처럼 표가 핵심인 문서에서 표 구조를 잃지 않는 것이 검색 품질의 전제</span></h3>
+      <ol class="stepper">
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">1</span>
+          <span class="step-title">업로드</span>
+          <span class="step-desc">파일 크기 10MB 제한</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">2</span>
+          <span class="step-title">PDF 변환</span>
+          <span class="step-desc">HWP / DOCX / XLSX / PPT → PDF — 한국 공공·교육 도메인 특유의 HWP까지 처리</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">3</span>
+          <span class="step-title">테이블 인지 추출</span>
+          <span class="step-desc">pdfplumber / pymupdf4llm — 표 유무에 따라 HTML / Markdown 분기 추출</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">4</span>
+          <span class="step-title">청킹</span>
+          <span class="step-desc">RecursiveCharacterTextSplitter — chunk 6000 / overlap 250</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">5</span>
+          <span class="step-title">임베딩</span>
+          <span class="step-desc">트랙별 임베딩 모델 (VoyageAI / Bedrock Titan)</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">6</span>
+          <span class="step-title">FAISS 생성</span>
+          <span class="step-desc">트랙별 벡터스토어 구축</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">7</span>
+          <span class="step-title">S3 업로드</span>
+          <span class="step-desc">영속화 — 온디맨드 다운로드로 무상태 인스턴스 지원</span>
+        </li>
+      </ol>
+
+      <h3>운영 디테일 <span class="h3-sub">— PoC가 아니라 운영 서비스라서 들어간 것들</span></h3>
+      <div class="case-grid">
+        <article class="case-card">
+          <span class="case-id">스트리밍</span>
+          <h3>SSE 개행 보존 — 커스텀 딜리미터</h3>
+          <p>SSE는 규격상 개행을 이벤트 구분자로 쓰기 때문에 답변 내 개행이 깨지는 문제 →
+          커스텀 딜리미터로 개행을 보존하는 스트리밍 프로토콜을 직접 정의.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">가용성</span>
+          <h3>세마포어 동시성 제한</h3>
+          <p><code>STREAM_MAX_CONCURRENCY=2</code> — 소형 인스턴스에서 LLM 스트리밍 폭주로
+          전체 서비스가 죽는 것을 막는 운영적 안전장치.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">대화 상태</span>
+          <h3>최근 10턴 대화 이력</h3>
+          <p>MongoDB 대화 이력(최근 10턴)을 LangChain 표준 대신 커스텀 chat history
+          클래스로 직접 제어.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">비용 가시성</span>
+          <h3>비용 추적 콜백 3종 + 월별 롤업</h3>
+          <p>토큰 단위 비용 추적 콜백 3종(연성/카카오/웹 채널별) + 사용자·월별 비용 롤업 —
+          멀티테넌트에서 "누가 얼마 쓰는지"를 처음부터 계측.</p>
+        </article>
+      </div>
+
+      <h3>카카오 i 콜백 비동기 응답 <span class="h3-sub">— 채널 응답 시간 제약과 LLM 지연 사이의 구조적 해법</span></h3>
+      <div class="flow" role="img" aria-label="카카오 i 콜백 흐름: 사용자 질문이 카카오 i 채널의 응답 시간 제약 안에서 콜백 방식으로 수락되고, 백엔드가 RAG 검색과 LLM 생성을 마친 뒤 콜백으로 최종 답변을 전달합니다.">
+        <div class="flow-node"><b>사용자 질문</b><small>카카오 i 채널</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node"><b>채널 응답 시간 제약</b><small>제약 안에 LLM 응답을 직접 돌려줄 수 없음</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>콜백 방식 수락</b><small>FastAPI 백엔드 — 비동기 처리 전환</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node rag"><b>RAG 검색 + 생성</b><small>FAISS MMR 검색 → Claude Sonnet 4</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>콜백으로 답변 전달</b><small>비동기 최종 응답</small></div>
+      </div>
+
+      <div class="callout">
+        <strong>운영 증거:</strong> 실제 대학(연성대학교) 운영 서비스로 배포·유지보수 중 —
+        벡터DB 데이터 업데이트 이력이 코드/커밋에 남아 있어 일회성 PoC가 아닌 운영 사이클의 증거입니다.
+      </div>
+
+      <div class="btn-row">
+        <a class="btn" href="https://yeonsung.sapie.ai/" target="_blank" rel="noopener noreferrer">실서비스 바로가기 — 연성대 입학상담 챗봇 ↗</a>
+        <span class="btn-note">실제 운영 중인 산출물 — 방문 가능 (승인된 공개 URL · 이 페이지의 유일한 외부 링크)</span>
+      </div>
+
+      <p class="stack-line"><b>스택</b> · FastAPI (Python 3.12) · AWS EC2 + CodeBuild/CodeDeploy 자동 배포 + systemd 상시 구동 · Bedrock Claude Sonnet 4 / Haiku 3.5 · VoyageAI voyage-3-large · Bedrock Titan 임베딩 · FAISS · S3 · MongoDB · Jinja2 도메인 프롬프트 · 카카오 i 채널 연동</p>
+    </div>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <div class="limits">
+      <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
+      <ul>
+        <li><span class="lim-tag">A08 · 정량 성과 미보유</span> — 상담 건수·응답 정확도 같은 성과 지표는 미보유. 운영 사실과 코드 수준 증거까지만 주장하고 효과 수치는 만들지 않습니다.</li>
+        <li><span class="lim-tag">A08 · 체계적 RAG 평가 부재</span> — 검색 품질에 대한 골든셋·회귀 평가 체계는 구축되어 있지 않음.</li>
+        <li><span class="lim-tag">A08 · 시크릿 하드코딩 부채</span> — 비공개 사본 레포에 시크릿이 하드코딩되어 있던 점은 보안 관행상의 부채 — 키 로테이션과 시크릿 매니저 이전이 권고 사항.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>연성대학교·SAPiE·카카오 i와 운영 URL(https://yeonsung.sapie.ai/ — 이 1건만 승인 예외)은 승인된 공개 범위이며, 그 외 엔드포인트·키·버킷명 등 내부 식별자는 포함하지 않습니다 — 정량 성과 수치는 보유하지 않아 주장하지 않습니다.<br>
+  정적 로컬 파일 · 외부 네트워크 호출 없음 · 외부 링크는 승인된 실서비스 링크 1건뿐입니다</p>
+</footer>
+
+<script src="../assets/theme.js"></script>
+</body>
+</html>

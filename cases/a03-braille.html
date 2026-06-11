@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>A03 — Sapie-Braille 에이전트 확장 | GenAI 케이스 스터디 쇼케이스</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">본문 바로가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">GenAI 케이스 스터디 쇼케이스</span>
+    <nav class="nav" aria-label="페이지 이동">
+      <a href="../index.html">← 쇼케이스 홈</a>
+      <a href="#a03">아키텍처</a>
+      <a href="#limits">정직한 한계</a>
+    </nav>
+    <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드 전환">
+      <span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-text">다크 모드</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="a03" aria-labelledby="a03-h">
+    <div class="card">
+      <div class="section-head">
+        <h2 id="a03-h">A03 — Sapie-Braille 에이전트 확장</h2>
+        <span class="badge badge-interview">interview-only</span>
+      </div>
+      <p class="section-sub">솔트웨어 점자 접근성 솔루션 Sapie-Braille — 3인 팀 팀장 리드 + 최종 행사 대응 기관별 에이전트 3종 단독 개발</p>
+      <p class="lede">
+        기존 Sapie-Braille 서비스(선행 자산) 위에 <strong>설정 기반 멀티 테넌트 에이전트 서버</strong>를 확장한 작업입니다.
+        “코드 수정 없이 설정으로 기관을 온보딩”이 확장 설계의 핵심이며,
+        제품 전체에 대한 소유권은 주장하지 않습니다 — 팀 리드와 에이전트 확장이 직접 수행한 기여 범위입니다.
+      </p>
+
+      <h3>진행 타임라인</h3>
+      <ol class="stepper">
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">1</span>
+          <span class="step-title">기존 Sapie-Braille 서비스</span>
+          <span class="step-desc">점자 변환 코어 등 선행 자산 — 솔트웨어의 수상 이력이 있는 상용 솔루션</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">2</span>
+          <span class="step-title">3인 팀 팀장 리드</span>
+          <span class="step-desc">일정·산출물 관리, 설계 방향, 고객 커뮤니케이션용 문서 등 프로젝트 문서 전반</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">3</span>
+          <span class="step-title">최종 행사(시연) 대응</span>
+          <span class="step-desc">행사 일정에 맞춘 기관별 에이전트 추가 개발 요구 발생</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">4</span>
+          <span class="step-title">에이전트 3종 단독 개발</span>
+          <span class="step-desc">기관별 YAML 설정 + 코퍼스 구성 + 독립 벡터 인덱스까지 혼자 추가</span>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true">5</span>
+          <span class="step-title">시연 탑재 + 절차 표준화</span>
+          <span class="step-desc">기관 3곳용 에이전트 완성·탑재, 신규 기관 추가가 “YAML 설정 + 코퍼스 등록”으로 표준화</span>
+        </li>
+      </ol>
+
+      <h3>아키텍처 — 설정 기반 멀티 테넌트 에이전트 서버</h3>
+      <div class="flow" role="img" aria-label="아키텍처 플로: 기관별 YAML 설정 1장이 FastAPI 멀티 테넌트 에이전트 서버의 기관별 에이전트 3종을 정의하고, 기관별 PDF 코퍼스를 OpenAI 임베딩으로 색인해 기관마다 독립된 Chroma 벡터 인덱스(S3 동기화)를 두며, AWS Bedrock의 Claude와 LangChain으로 답변을 생성합니다.">
+        <div class="flow-node"><b>기관별 YAML 설정 1장</b><small>코드 수정 없이 설정으로 신규 기관 정의</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>FastAPI 에이전트 서버</b><small>멀티 테넌트 · 기관별 에이전트 3종 가동</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>기관별 코퍼스</b><small>기관별 PDF + OpenAI 임베딩</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node rag"><b>독립 벡터 인덱스</b><small>기관별 Chroma · S3 동기화로 운영</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>Bedrock Claude 생성</b><small>LangChain 오케스트레이션 · 답변 응답</small></div>
+      </div>
+      <p class="flow-note">정확히 말하면 협업형 멀티 에이전트가 아니라 <strong>설정 기반 멀티 테넌트 에이전트 서버</strong>입니다 — 면접에서 이 구분을 먼저 말하는 것이 정직한 포지션. 배포는 Dockerfile + EC2 셋업 스크립트 + SSM 환경변수 로더로 실제 AWS에 올려 운영했고, Bedrock 클라이언트 등 단위 테스트가 존재합니다.</p>
+
+      <h3>신규 기관 온보딩 절차 <span class="h3-sub">— 확장의 반복 비용을 낮춘 표준 절차</span></h3>
+      <div class="flow" role="img" aria-label="온보딩 절차: YAML 설정 작성, 기관 PDF 코퍼스 등록, 독립 벡터 인덱스 생성, 신규 기관 에이전트 가동 — 코드 수정 없음.">
+        <div class="flow-node"><b>① YAML 설정 작성</b><small>기관별 설정 1장</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node"><b>② 코퍼스 등록</b><small>기관 제공 PDF</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node"><b>③ 독립 인덱스 생성</b><small>기관별 격리 보장</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>④ 에이전트 가동</b><small>코드 수정 없음</small></div>
+      </div>
+
+      <h3>역할과 기여 경계 <span class="h3-sub">— 무엇이 내 것이고 무엇이 선행 자산인지</span></h3>
+      <div class="case-grid">
+        <div class="case-card">
+          <span class="case-id">역할 1</span>
+          <h3>팀장 (3인 팀)</h3>
+          <p>일정·산출물 관리, 설계 방향 결정, 고객 커뮤니케이션용 문서를 포함한 프로젝트 문서 전반 리드.</p>
+        </div>
+        <div class="case-card">
+          <span class="case-id">역할 2</span>
+          <h3>에이전트 3종 단독 개발</h3>
+          <p>최종 행사 대응으로 기관별 에이전트 3개를 혼자 추가 — 기관별 설정, 코퍼스 구성, 독립 벡터 인덱스까지.</p>
+        </div>
+        <div class="case-card">
+          <span class="case-id">경계</span>
+          <h3>선행 자산은 선행 자산으로</h3>
+          <p>점자 변환 코어 등 기존 Sapie-Braille 서비스는 선행 자산 — full product ownership을 주장하지 않습니다.</p>
+        </div>
+      </div>
+
+      <ul class="chips" aria-label="A03 스택">
+        <li class="chip"><strong>AWS Bedrock (Claude)</strong></li>
+        <li class="chip"><strong>LangChain</strong></li>
+        <li class="chip"><strong>Chroma</strong> (S3 동기화)</li>
+        <li class="chip"><strong>OpenAI 임베딩</strong></li>
+        <li class="chip"><strong>FastAPI</strong></li>
+        <li class="chip"><strong>EC2 + SSM</strong> 배포 실증</li>
+      </ul>
+
+      <div class="callout honest">
+        <strong>기여 경계 명시:</strong> 기존 서비스 위 확장으로, 제품 전체 소유권은 주장하지 않습니다.
+        Sapie-Braille 제품명·솔트웨어 소속은 공개 승인 항목이며, 도입/시연 대상 기관 실명·기관 제공 원본 데이터·구현 코드 발췌는 공개하지 않습니다.
+      </div>
+
+      <p class="stack-line"><b>스택</b> · AWS Bedrock(Claude) · LangChain · Chroma 벡터스토어(S3 동기화) · OpenAI 임베딩 · FastAPI · Dockerfile + EC2 셋업 스크립트 + SSM 환경변수 로더</p>
+    </div>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <div class="limits">
+      <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
+      <ul>
+        <li><span class="lim-tag">A03 · 기여 범위</span> — 기존 상용 서비스 위의 에이전트 확장 기여만 다룸. 점자 변환 코어 등은 선행 자산이며 full product ownership을 주장하지 않음.</li>
+        <li><span class="lim-tag">A03 · 정량 지표 부재</span> — 결과는 행사 시연 탑재와 온보딩 절차 표준화 중심으로, 공개 가능한 정량 벤치마크 수치 없음.</li>
+        <li><span class="lim-tag">A03 · 공개 경계</span> — 도입/시연 기관 실명, 기관 제공 원본 데이터, 구현 코드 발췌는 비공개 (interview-only).</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>고객사·콜봇 플랫폼·월패드 제조사명은 익명 처리했으며, 모든 성능 수치는 자체 벤치마크 산출물 기준입니다 — 최종 선정 탈락 사실을 포함해 결과를 있는 그대로 기재했습니다.<br>
+  정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)</p>
+</footer>
+
+<script src="../assets/theme.js"></script>
+</body>
+</html>
