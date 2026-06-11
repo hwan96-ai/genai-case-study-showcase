@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>A02 — 한국어 TTS 평가 기준 설계 (월패드 음성 안내) | GenAI 케이스 스터디 쇼케이스</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">본문 바로가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">GenAI 케이스 스터디 쇼케이스</span>
+    <nav class="nav" aria-label="페이지 이동">
+      <a href="../index.html">← 쇼케이스 홈</a>
+      <a href="#a02">비교 표</a>
+      <a href="#limits">정직한 한계</a>
+    </nav>
+    <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드 전환">
+      <span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-text">다크 모드</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="a02" aria-labelledby="a02-h">
+    <div class="card">
+      <div class="section-head">
+        <h2 id="a02-h">A02 — 한국어 TTS 평가 기준 설계 (월패드 음성 안내)</h2>
+        <span class="badge badge-public">public-candidate</span>
+        <span class="badge badge-result">실계약 체결 → 2026-03 계약 종료(완료)</span>
+      </div>
+      <p class="section-sub">[월패드 제조사] 음성 안내 모델 선정 — “어떤 모델이 좋은가”가 아니라 “무엇이 좋다는 기준인가”를 먼저 설계</p>
+      <p class="lede">
+        5축 기준(<strong>RTF&lt;0.5 · 메모리&lt;1GB · 한국어 발음 · 라이선스 · 운영</strong>)을 측정 전에 사전 정의하고,
+        설치 방식이 전부 다른 6개 엔진을 어댑터 패턴 하네스(~2일 구축)로 동일 조건에서 실측해
+        <strong>이원 추천 + 탈락 근거</strong>를 데이터로 제시했습니다.
+      </p>
+
+      <h3>진행 플로 <span class="h3-sub">— 기준을 먼저 만들고, 같은 조건에서 재고, 데이터로 추천</span></h3>
+      <div class="flow" role="img" aria-label="진행 플로: 5축 기준을 측정 전에 정의하고, 어댑터 패턴 하네스를 약 2일에 구축한 뒤, 6개 모델을 동일 조건에서 실측하고, 이원 추천과 탈락 근거를 제시했으며, 실제 계약 체결로 이어져 2026년 3월 계약 종료(완료)되었습니다.">
+        <div class="flow-node"><b>① 기준 정의</b><small>5축 SPEC 사전 명문화 — 측정 전에 “좋다”의 기준 고정</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>② 어댑터 하네스</b><small>~2일 구축 · BaseTTS load/synthesize 분리로 공정 비교</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>③ 6모델 실측</b><small>CSV 130행 + wav 157개 · 초기화 실패는 해당 모델만 skip</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node rag"><b>④ 이원 추천</b><small>즉시 도입 MeloTTS / 품질 우선 CosyVoice + 탈락 근거</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>⑤ 실계약</b><small>실제 계약 체결 → 2026-03 계약 종료(완료)</small></div>
+      </div>
+
+      <h3>평가 5축 <span class="h3-sub">— “어떤 모델이 좋은가” 전에 “무엇이 좋다는 기준인가”</span></h3>
+      <div class="gates" role="img" aria-label="평가 5축: 1 응답 속도 RTF 0.5 미만 목표, 2 메모리 1GB 미만 선호, 3 한국어 발음 정확도, 4 상업 라이선스 명확성, 5 운영성(오프라인·설치·비용).">
+        <div class="gate"><b>응답 속도</b><small>RTF &lt; 0.5 목표 — 실시간 안내 요구의 정량 번역</small></div>
+        <div class="gate"><b>메모리</b><small>&lt; 1GB 선호 — Raspberry Pi 4 / Jetson Nano급 임베디드 탑재</small></div>
+        <div class="gate"><b>한국어 발음</b><small>초성·중성·종성 정확도, 숫자·기술용어 읽기</small></div>
+        <div class="gate"><b>라이선스</b><small>상업 사용 명확성 — MIT/Apache 우선</small></div>
+        <div class="gate"><b>운영</b><small>오프라인 가능 여부 · 설치 난이도 · 비용</small></div>
+      </div>
+
+      <h3>RTF 실측 비교 <span class="h3-sub">— 낮을수록 빠름 · 점선 = RTF&lt;0.5 목표 기준선</span></h3>
+      <figure class="chart" role="img"
+        aria-label="모델별 RTF 가로 막대 차트. MeloTTS-Korean 0.063, gTTS 0.13, CosyVoice-300M-SFT 0.28은 RTF 0.5 기준선 이내, Zonos-v0.1은 2.11로 기준선 초과. Kokoro-82M과 Coqui XTTS-v2는 한국어 미지원 및 용도 불일치로 RTF 비교에서 제외.">
+        <p class="chart-title">RTF (Real-Time Factor) 실측</p>
+        <div class="hchart" aria-hidden="true">
+          <div class="hrow">
+            <span class="hlabel"><b>MeloTTS-Korean</b><small>50회 평균 · CPU</small></span>
+            <span class="htrack">
+              <span class="htick" style="left:22.7%"><i>RTF 0.5 기준선</i></span>
+              <span class="hfill pass" style="width:2.9%"><span class="hnum">0.063</span></span>
+            </span>
+          </div>
+          <div class="hrow">
+            <span class="hlabel"><b>gTTS</b><small>네트워크 의존</small></span>
+            <span class="htrack">
+              <span class="htick" style="left:22.7%"></span>
+              <span class="hfill cond" style="width:5.9%"><span class="hnum">0.13</span></span>
+            </span>
+          </div>
+          <div class="hrow">
+            <span class="hlabel"><b>CosyVoice-300M-SFT</b><small>품질 최상</small></span>
+            <span class="htrack">
+              <span class="htick" style="left:22.7%"></span>
+              <span class="hfill pass" style="width:12.7%"><span class="hnum">0.28</span></span>
+            </span>
+          </div>
+          <div class="hrow">
+            <span class="hlabel"><b>Zonos-v0.1</b><small>첫 호출 29s</small></span>
+            <span class="htrack">
+              <span class="htick" style="left:22.7%"></span>
+              <span class="hfill fail" style="width:95.9%"><span class="hnum">2.11</span></span>
+            </span>
+          </div>
+        </div>
+        <figcaption>
+          Kokoro-82M(생성은 성공하나 한국어 미지원 — 영어 음소 폴백)·Coqui XTTS-v2(zero-shot 복제 전용, 용도 불일치)는 RTF 비교에서 제외.
+          CSV 실측은 gTTS/MeloTTS/Zonos 3종이며 CosyVoice 0.28은 문서 기록치. gTTS는 RTF 기준 이내라도 비공식 API 상업 사용 리스크로 프로토타입 전용(주황).
+        </figcaption>
+      </figure>
+
+      <h3>6모델 비교 표 <span class="h3-sub">— 판정 근거 포함</span></h3>
+      <div class="table-wrap">
+        <table>
+          <caption class="visually-hidden">6개 TTS 모델 비교: RTF 실측치와 판정</caption>
+          <thead>
+            <tr><th scope="col">모델</th><th scope="col">RTF (실측)</th><th scope="col">한국어 적합성</th><th scope="col">판정</th></tr>
+          </thead>
+          <tbody>
+            <tr class="pick">
+              <td>MeloTTS-Korean</td><td><strong>0.063</strong> (50회 평균)</td><td>한국어 전용, 발음 양호</td>
+              <td><span class="verdict-pick">즉시 도입 1순위</span> — MIT 라이선스 · 완전 오프라인 · CPU로 실시간의 ~16배</td>
+            </tr>
+            <tr class="pick">
+              <td>CosyVoice-300M-SFT</td><td>0.28</td><td>한국어 전용 화자, 품질 최상</td>
+              <td><span class="verdict-pick">품질 우선 대안</span> — 설치 복잡 · 숫자 영어 읽기 이슈</td>
+            </tr>
+            <tr>
+              <td>gTTS</td><td>0.13</td><td>품질 무난</td>
+              <td><span class="verdict-cond">프로토타입 전용</span> — 비공식 API 상업 사용 리스크 · 네트워크 의존</td>
+            </tr>
+            <tr>
+              <td>Zonos-v0.1</td><td>2.11 (첫 호출 29s)</td><td>발음 부자연</td>
+              <td><span class="verdict-drop">탈락</span> — GPU 3.6GB · 워밍업 비용</td>
+            </tr>
+            <tr>
+              <td>Kokoro-82M</td><td>(생성은 성공)</td><td>한국어 미지원 — 영어 음소 폴백</td>
+              <td><span class="verdict-drop">탈락</span> — “성공률 5/5인데 발음 불가”: 지표만 보면 속는 사례</td>
+            </tr>
+            <tr>
+              <td>Coqui XTTS-v2</td><td>—</td><td>zero-shot 복제 전용</td>
+              <td><span class="verdict-drop">용도 불일치</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="chips" aria-label="A02 증거 수치">
+        <li class="chip">5축 기준 사전 SPEC 명문화</li>
+        <li class="chip">어댑터 패턴 하네스 <strong>~2일</strong> 구축</li>
+        <li class="chip">실측 산출물 <strong>CSV 130행 + wav 157개</strong></li>
+        <li class="chip chip-ok"><strong>실제 계약으로 연결 → 2026-03 종료(완료)</strong></li>
+      </ul>
+
+      <div class="btn-row">
+        <a class="btn btn-secondary" href="https://github.com/hwan96-ai/korean-tts-benchmark" target="_blank" rel="noopener noreferrer">공개 벤치마크 레포 보기 ↗</a>
+        <span class="btn-note">하네스 + 실측 CSV + 비교 문서 (익명 치환·새니타이즈 완료본)</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <div class="limits">
+      <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
+      <ul>
+        <li><span class="lim-tag">A02 · 주관 청취 평가</span> — MOS 패널·ASR 역전사 같은 객관 품질 지표 부재, CSV 실측은 3개 모델 기준.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>고객사·콜봇 플랫폼·월패드 제조사명은 익명 처리했으며, 모든 성능 수치는 자체 벤치마크 산출물 기준입니다 — 최종 선정 탈락 사실을 포함해 결과를 있는 그대로 기재했습니다.<br>
+  정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)</p>
+</footer>
+
+<script src="../assets/theme.js"></script>
+</body>
+</html>

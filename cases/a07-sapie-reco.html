@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>A07 — Sapie Reco 배치 추천 엔진 (idus/backpackr) | GenAI 케이스 스터디 쇼케이스</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">본문 바로가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">GenAI 케이스 스터디 쇼케이스</span>
+    <nav class="nav" aria-label="페이지 이동">
+      <a href="../index.html">← 쇼케이스 홈</a>
+      <a href="#pipeline">파이프라인</a>
+      <a href="#limits">정직한 한계</a>
+    </nav>
+    <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드 전환">
+      <span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-text">다크 모드</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="pipeline" aria-labelledby="a07-h">
+    <div class="card">
+      <div class="section-head">
+        <h2 id="a07-h">A07 — Sapie Reco 배치 추천 엔진 (idus/backpackr)</h2>
+        <span class="badge badge-public">public-candidate</span>
+        <span class="badge badge-role">델리버리 리드 · 총괄 참여</span>
+      </div>
+      <p class="section-sub">idus(backpackr) 핸드메이드 이커머스 대상 LLM 기반 배치 상품 추천 엔진 —
+      Airflow가 오케스트레이션하고 AWS Batch가 분산 실행하는 구조 위에서, Bedrock Claude 모델을 역할별로 계층화해
+      약 18,000개 상품의 테마 생성·추천 랭킹을 야간 배치로 수행. 실제 상용 서비스로 공개 출시(보도자료 존재).</p>
+
+      <div class="callout honest">
+        <strong>역할을 정직하게:</strong> 프로젝트 전체 진행과 아키텍처 방향을 총괄하는
+        <strong>델리버리 리드로 참여</strong>했으며, 구현 커밋의 다수는 동료 엔지니어의 작업입니다.
+        이 페이지는 단독 구현 주장이 아니라, 총괄 참여자로서 시스템 구조와 엔지니어링 결정을
+        설명할 수 있다는 증거로 작성되었습니다.
+      </div>
+
+      <h3>두 개의 DAG <span class="h3-sub">— Airflow 2.10.5(CeleryExecutor)는 스케줄·의존성·재시도만, 무거운 연산은 AWS Batch로 위임</span></h3>
+
+      <p class="flow-note"><b>① reco-theme</b> — 키워드 → 테마 생성 파이프라인</p>
+      <div class="flow" role="img" aria-label="reco-theme DAG 흐름: 키워드 입력이 Claude 3.5 Sonnet 테마 생성을 거쳐 테마 산출과 ChromaDB 적재로 이어집니다.">
+        <div class="flow-node"><b>키워드</b><small>상품 ~18,000개 기준 키워드 450개 / 카테고리 30개로 동적 스케일링</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>테마 생성</b><small>Claude 3.5 Sonnet · 68줄 시스템 프롬프트(좋은/나쁜 예시 + 시즌성·용도 분류 기준 명문화)</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>테마 산출</b><small>임베딩: Amazon Titan · 벡터스토어: ChromaDB(cosine, HNSW M=64)</small></div>
+      </div>
+
+      <p class="flow-note"><b>② reco-pick</b> — occasion 분류 → 테마 분류 → 추천 랭킹 · 장기 배치 특성을 반영한 <strong>48시간 타임아웃</strong> 운용</p>
+      <div class="flow" role="img" aria-label="reco-pick DAG 흐름: occasion 분류, 테마 분류, 추천 랭킹을 Claude 3.5 Haiku로 수행하고 AB 테스트 그룹 라우팅으로 결과를 내보냅니다. DAG 전체는 48시간 타임아웃으로 운용됩니다.">
+        <div class="flow-node cache"><b>occasion 분류</b><small>Claude 3.5 Haiku · 대량 호출 단계</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>테마 분류</b><small>Claude 3.5 Haiku</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node rag"><b>추천 랭킹</b><small>Claude 3.5 Haiku · 계층적 재랭킹 · 실패 시 CTA 정렬 폴백</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>추천 결과</b><small>AB 테스트 그룹 라우팅 지원 — 추천 전략 변경을 실험 가능한 구조로</small></div>
+      </div>
+      <p class="flow-note">인프라는 AWS CDK/CloudFormation 기반 IaC — Batch 컴퓨트 환경·잡 정의를 코드로 관리해
+      워커 자원과 LLM 배치 연산의 수명주기를 분리했습니다.</p>
+
+      <h3>모델 비용 계층화 <span class="h3-sub">— 호출량이 많은 단계에 저비용 모델 배치</span></h3>
+      <div class="chart-grid">
+        <figure class="chart" role="img"
+          aria-label="모델 공식 단가 비교 막대 차트, 1K 토큰당 미국 달러. Sonnet 입력 0.003, Haiku 입력 0.001, Sonnet 출력 0.015, Haiku 출력 0.005. 입력과 출력 모두 Sonnet이 Haiku의 3배입니다.">
+          <p class="chart-title">공식 단가 비교 ($ / 1K 토큰)</p>
+          <div class="bars" aria-hidden="true">
+            <div class="bar-col">
+              <div class="bar latency-bar" style="height:20%"><span class="bar-val">$0.003</span></div>
+              <span class="bar-label"><b>Sonnet</b><br>입력</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar best" style="height:6.7%"><span class="bar-val">$0.001</span></div>
+              <span class="bar-label"><b>Haiku</b><br>입력</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar latency-bar" style="height:100%"><span class="bar-val">$0.015</span></div>
+              <span class="bar-label"><b>Sonnet</b><br>출력</span>
+            </div>
+            <div class="bar-col">
+              <div class="bar best" style="height:33.3%"><span class="bar-val">$0.005</span></div>
+              <span class="bar-label"><b>Haiku</b><br>출력</span>
+            </div>
+          </div>
+          <figcaption>입력·출력 모두 Sonnet이 Haiku의 3배 — 호출량 분포를 근거로 단계별 모델을 배치한 결정의 단가 근거.
+          TokenTracker로 모델별 입·출력 토큰과 비용을 집계해 배치 1회당 LLM 비용을 측정 가능한 운영 지표로 만들었습니다.</figcaption>
+        </figure>
+        <figure class="chart">
+          <p class="chart-title">역할 분담 — 3개 모델 계층</p>
+          <div class="flow" role="img" aria-label="모델 역할 분담: Claude 3.5 Sonnet은 테마 생성, Claude 3.5 Haiku는 분류와 랭킹, Amazon Titan은 임베딩을 담당합니다.">
+            <div class="flow-node rag"><b>Claude 3.5 Sonnet</b><small>테마 생성 — 창의성·품질이 필요한 단계</small></div>
+            <div class="flow-node cache"><b>Claude 3.5 Haiku</b><small>occasion·테마 분류, 추천 랭킹 — 대량 호출 단계의 비용 계층화</small></div>
+            <div class="flow-node resp"><b>Amazon Titan</b><small>임베딩 → ChromaDB(cosine, HNSW M=64) 벡터 검색</small></div>
+          </div>
+          <figcaption>모든 호출을 최상위 모델로 처리하면 비용이 폭증 — 단계별 요구 품질에 맞춰 모델을 계층화했습니다.</figcaption>
+        </figure>
+      </div>
+
+      <ul class="chips" aria-label="핵심 수치">
+        <li class="chip"><strong>상품 ~18,000개</strong></li>
+        <li class="chip"><strong>배치 사이즈 1000</strong></li>
+        <li class="chip"><strong>병렬 워커 10</strong></li>
+        <li class="chip"><strong>재시도 3회 + 지수 백오프</strong></li>
+        <li class="chip"><strong>48시간 타임아웃</strong></li>
+        <li class="chip"><strong>키워드 450 / 카테고리 30</strong></li>
+      </ul>
+
+      <h3>실패 복원력 <span class="h3-sub">— 48시간 배치에서 단일 호출 실패가 전체를 죽이지 않도록</span></h3>
+      <div class="flow" role="img" aria-label="실패 복원력 흐름: LLM 랭킹 호출이 실패하면 재시도 3회와 지수 백오프를 거치고, 그래도 실패하면 CTA 클릭률 정렬 폴백으로 강등됩니다.">
+        <div class="flow-node"><b>LLM 랭킹 호출</b><small>Claude 3.5 Haiku</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>실패 시 재시도</b><small>3회 + 지수 백오프</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node rag"><b>최종 실패</b><small>장시간 배치는 부분 실패가 기본 전제</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>CTA(클릭률) 정렬 폴백</b><small>비LLM이지만 합리적인 순위 보장 — graceful degradation</small></div>
+      </div>
+
+      <p class="flow-note"><b>계층적 재랭킹</b> — LLM 컨텍스트 길이·비용 한계를 토너먼트 구조로 우회</p>
+      <div class="flow" role="img" aria-label="계층적 재랭킹 구조: 50개 초과 배치는 서브배치로 분할하고, 각 서브배치 상위 20%만 모아 최종 재랭킹합니다.">
+        <div class="flow-node"><b>50개 초과 배치</b><small>한 번에 랭킹하기엔 컨텍스트·비용 부담</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>서브배치 분할</b></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>서브배치별 상위 20% 선별</b></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>최종 재랭킹</b><small>컨텍스트·비용을 묶으면서 랭킹 품질 유지</small></div>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn" href="https://www.newswire.co.kr/newsRead.php?no=1003424" target="_blank" rel="noopener noreferrer">공개 보도자료 (뉴스와이어) ↗</a>
+        <span class="btn-note">실제 상용 서비스 공개 출시의 공개 근거 — 이 페이지의 유일한 외부 링크</span>
+      </div>
+
+      <p class="stack-line"><b>스택</b> · Airflow 2.10.5 (CeleryExecutor) · AWS Batch · AWS CDK/CloudFormation IaC · AWS Bedrock — Claude 3.5 Sonnet(테마 생성) / Claude 3.5 Haiku(분류·랭킹) · Amazon Titan 임베딩 · ChromaDB (cosine, HNSW M=64) · TokenTracker 비용 집계</p>
+    </div>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <div class="limits">
+      <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
+      <ul>
+        <li><span class="lim-tag">A07 · 정량 성과 미보유</span> — 전환율·CTR 개선 등 성과 지표는 비공개이거나 미보유. 이 페이지는 성과 수치를 주장하지 않습니다.</li>
+        <li><span class="lim-tag">A07 · 역할은 총괄 참여</span> — 구현 기여의 다수는 동료 엔지니어. 본인 기여는 델리버리 총괄·오케스트레이션 관점으로 한정해 서술합니다.</li>
+        <li><span class="lim-tag">A07 · 공개 코드 없음</span> — 소스는 비공개 사본 레포로 외부 검증 가능한 공개 코드가 없으며, 출시 사실의 공개 근거는 보도자료입니다.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Sapie Reco·idus(backpackr) 실명은 승인된 공개 범위이며, 정량 성과 수치는 보유하지 않아 주장하지 않습니다 — 역할(총괄 참여)과 공개 근거(보도자료)의 경계를 그대로 기재했습니다.<br>
+  정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)</p>
+</footer>
+
+<script src="../assets/theme.js"></script>
+</body>
+</html>

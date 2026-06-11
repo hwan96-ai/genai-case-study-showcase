@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>A04 — CardFollow: 명함 기반 세일즈킷 이메일 에이전트 | GenAI 케이스 스터디 쇼케이스</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">본문 바로가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">GenAI 케이스 스터디 쇼케이스</span>
+    <nav class="nav" aria-label="페이지 이동">
+      <a href="../index.html">← 쇼케이스 홈</a>
+      <a href="#a04">SEND_MODE 사다리</a>
+      <a href="#limits">정직한 한계</a>
+    </nav>
+    <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드 전환">
+      <span class="toggle-icon" aria-hidden="true">☾</span><span class="toggle-text">다크 모드</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section id="a04" aria-labelledby="a04-h">
+    <div class="card">
+      <div class="section-head">
+        <h2 id="a04-h">A04 — CardFollow: 명함 기반 세일즈킷 이메일 에이전트</h2>
+        <span class="badge badge-interview">interview-only · 운영 배포 증거 (로그인 필요)</span>
+      </div>
+      <p class="section-sub">명함 사진 → OCR(mock↔gpt-4o-mini Vision) → 사람 검수 → Microsoft Graph 발송 · 3주 단독 풀스택(FastAPI+React/TS, 라우터 10 · 페이지 9)</p>
+      <p class="lede">핵심 차별점은 기능이 아니라 <strong>발송 경계 설계</strong> — “자동화는 의사결정 지원이지 자율 아웃리치가 아니다”를 코드 수준에서 증명했습니다.</p>
+
+      <h3>엔드 투 엔드 플로 <span class="h3-sub">— 사람 검수와 게이트가 실발송 앞을 항상 막아섭니다</span></h3>
+      <div class="flow" role="img" aria-label="엔드 투 엔드 플로: 명함 사진 업로드 후 OCR(mock과 gpt-4o-mini Vision 전환), 사람 검수에서 reviewed 강제, 이메일 초안 생성, SEND_MODE 사다리와 7중 게이트를 거쳐 Microsoft Graph로 1통 단위 발송.">
+        <div class="flow-node"><b>① 명함 사진</b><small>업로드 — 라이브 데모는 mock OCR 합성 데이터</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node"><b>② OCR</b><small>mock ↔ gpt-4o-mini Vision 전환</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>③ 사람 검수</b><small>reviewed 강제 — 검수 통과 연락처만 다음 단계로</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>④ 이메일 초안</b><small>세일즈킷 초안 생성 · 발송 전 확인</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node rag"><b>⑤ SEND_MODE + 7중 게이트</b><small>아래 사다리·게이트 전부 통과해야 발송 경로 진입</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>⑥ Microsoft Graph 발송</b><small>게이트 통과 1통 단위만 실발송</small></div>
+      </div>
+
+      <h3>SEND_MODE 4단계 사다리 <span class="h3-sub">— 단계마다 외부 영향 범위가 한 칸씩만 넓어짐</span></h3>
+      <div class="ladder" role="img" aria-label="SEND_MODE 4단계 사다리: test는 외부 호출 0건, manual은 Graph 미호출 .eml 다운로드, draft는 Outlook 초안만 생성, send는 7중 게이트를 통과한 1통 단위만 발송.">
+        <div class="rung rung-1">
+          <div class="rung-bar" aria-hidden="true"></div>
+          <div class="rung-head">test</div>
+          <span class="rung-tag">외부 호출 0건</span>
+          <div class="rung-body">렌더 + 로그만. 라이브 데모가 이 모드로 핀 고정.</div>
+        </div>
+        <div class="rung rung-2">
+          <div class="rung-bar" aria-hidden="true"></div>
+          <div class="rung-head">manual</div>
+          <span class="rung-tag">Graph 미호출</span>
+          <div class="rung-body">.eml 다운로드 + 필드 복사 — admin consent 없는 조직에도 가치를 먼저 전달하는 도입 경로.</div>
+        </div>
+        <div class="rung rung-3">
+          <div class="rung-bar" aria-hidden="true"></div>
+          <div class="rung-head">draft</div>
+          <span class="rung-tag">초안만 생성</span>
+          <div class="rung-body">Graph로 Outlook 초안만 — 발송 권한(Mail.Send) 분리로 최소권한 유지.</div>
+        </div>
+        <div class="rung rung-4">
+          <div class="rung-bar" aria-hidden="true"></div>
+          <div class="rung-head">send</div>
+          <span class="rung-tag">게이트 통과 1통만</span>
+          <div class="rung-body">아래 7중 게이트를 전부 통과한 1통 단위만 실발송.</div>
+        </div>
+      </div>
+
+      <h3>실발송 7중 게이트</h3>
+      <div class="gates" role="img" aria-label="실발송 7중 게이트: SEND_MODE=send, ENABLE_AUTO_SEND=true 이중 환경변수, 사람 검수 reviewed 강제, 이메일 재검증, 중복 차단, 첨부 검증 3MB 캡, TTL 120초 단일사용 확인 토큰.">
+        <div class="gate"><b>SEND_MODE=send</b><small>모드 게이트</small></div>
+        <div class="gate"><b>ENABLE_AUTO_SEND=true</b><small>이중 env 게이트</small></div>
+        <div class="gate"><b>reviewed 강제</b><small>사람 검수 통과 연락처만</small></div>
+        <div class="gate"><b>이메일 재검증</b><small>발송 직전 재확인</small></div>
+        <div class="gate"><b>중복 차단</b><small>이벤트+정규화 이메일 기준</small></div>
+        <div class="gate"><b>첨부 검증</b><small>존재/경로/사이즈 — Graph 호출 전 3MB 캡</small></div>
+        <div class="gate"><b>단일사용 확인 토큰</b><small>TTL 120초 · scope-hash 바인딩 · 정확히 1회 소비</small></div>
+      </div>
+
+      <h3>운영 인시던트 → 가드 코드화 <span class="h3-sub">— 장애를 일화로 두지 않고 코드로 남김</span></h3>
+      <div class="flow" role="img" aria-label="운영 인시던트 플로: Microsoft Graph 스로틀 인시던트 발생, 재시도 12건 중 12건 성공으로 복구, 이후 배치 상한과 쿨다운 가드를 코드화.">
+        <div class="flow-node rag"><b>Graph 스로틀 인시던트</b><small>발송 경로에서 스로틀링 발생</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node cache"><b>재시도 12/12 성공</b><small>유실 없이 전건 복구 확인</small></div>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <div class="flow-node resp"><b>가드 코드화</b><small>배치 상한 · 쿨다운을 코드 수준 가드로 반영</small></div>
+      </div>
+
+      <ul class="chips" aria-label="A04 검증·운영 증거">
+        <li class="chip"><strong>테스트 함수 236</strong> (기록 201 passed)</li>
+        <li class="chip">Playwright e2e <strong>3종</strong></li>
+        <li class="chip">2026-05-13 통제된 <strong>1통 실발송 + 409 재전송 차단</strong> 확인</li>
+        <li class="chip">2026-05-20 <strong>AI EXPO 실사용</strong></li>
+        <li class="chip">Graph 스로틀 인시던트 → 재시도 <strong>12/12</strong> → 배치 상한·쿨다운 가드 코드화</li>
+      </ul>
+
+      <div class="btn-row">
+        <a class="btn" href="https://cardfollow-preview-hwan.fly.dev/" target="_blank" rel="noopener noreferrer">라이브 데모 열기 (로그인 필요) ↗</a>
+        <span class="btn-note">SEND_MODE=test 환경 핀 고정 — 발송 불가 · 로그인 계정 필요(외부 체험 불가, 운영 배포 증거) · 본인 로그인 시 mock OCR 합성 데이터로 전체 플로 시연</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="limits" aria-labelledby="limits-h">
+    <div class="limits">
+      <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
+      <ul>
+        <li><span class="lim-tag">A04 · 정량 효과 지표 없음</span> — 발송 수치는 통제 테스트 1통 + 행사 사용 일화 수준, 확인 토큰은 in-memory(수평 확장 불가, 의도된 제약).</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>고객사·콜봇 플랫폼·월패드 제조사명은 익명 처리했으며, 모든 성능 수치는 자체 벤치마크 산출물 기준입니다 — 최종 선정 탈락 사실을 포함해 결과를 있는 그대로 기재했습니다.<br>
+  정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)</p>
+</footer>
+
+<script src="../assets/theme.js"></script>
+</body>
+</html>
