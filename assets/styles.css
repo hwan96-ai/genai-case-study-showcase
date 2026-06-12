@@ -448,3 +448,22 @@ footer {
   .hfill, .htick, .hfill.fail .hnum { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .hchart { break-inside: avoid; }
 }
+
+/* --- portfolio additions --- */
+/* 소개(About) 섹션 + 증거 원칙 스트립 — 기존 변수만 사용, 다크/인쇄 호환 */
+.about-role {
+  margin: 0 0 6px;
+  font-size: .88rem; font-weight: 700; letter-spacing: .03em;
+  color: var(--accent-strong);
+}
+.principle-strip {
+  margin: 14px 0 0;
+  border: 1px solid var(--accent); background: var(--accent-soft);
+  border-radius: 10px; padding: 10px 16px;
+  text-align: center; font-size: .86rem; font-weight: 600;
+  color: var(--accent-strong); line-height: 1.55;
+}
+footer a { color: var(--accent); }
+@media print {
+  .principle-strip { break-inside: avoid; }
+}
