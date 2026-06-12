@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<title>GenAI 케이스 스터디 쇼케이스 — 평가 설계·RAG·에이전트 안전 경계</title>
+<title>GenAI 케이스 스터디 포트폴리오 — 평가 설계·RAG·에이전트 안전 경계</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -13,8 +13,9 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <span class="brand">GenAI 케이스 스터디 쇼케이스</span>
+    <span class="brand">GenAI 케이스 스터디 포트폴리오</span>
     <nav class="nav" aria-label="섹션 이동">
+      <a href="#about">소개</a>
       <a href="#cases">케이스</a>
       <a href="#library">지원 증거</a>
     </nav>
@@ -43,6 +44,35 @@
         <span class="legend-item" role="listitem"><span class="badge badge-support">support · evidence</span> 보조 증거 (A01, B 시리즈)</span>
       </div>
     </div>
+  </section>
+
+  <!-- (a-2) 소개 / About — 포지셔닝은 PORTFOLIO-HUB §1 승인 문안 압축 재사용 -->
+  <section id="about" aria-labelledby="about-h">
+    <div class="card">
+      <h2 id="about-h">소개</h2>
+      <p class="about-role">GenAI Solutions Consultant (Saltware)</p>
+      <p class="lede">
+        고객 문제를 PoC 범위와 검증 기준으로 번역하고, 직접 구현해서 측정으로 증명합니다.
+        플래그십은 6개 벤더 경쟁 대기업 AICC 챗봇→콜봇 PoC를 단독 수행해 고객 검증 요건 4개를
+        전 항목 달성한 뒤 <strong>최종 선정에서 탈락한 경험</strong>으로, 이 탈락을 숨기지 않고
+        “기술 검증과 수주 사이의 간극”으로 설명합니다.
+        모든 수치에 출처(자체 벤치마크)를 붙이는 증거 규율이 차별점입니다.
+      </p>
+      <ul class="chips" aria-label="전문 영역">
+        <li class="chip">RAG 파이프라인</li>
+        <li class="chip">LLM 평가 설계</li>
+        <li class="chip">에이전트 안전 경계</li>
+        <li class="chip">비용 최적화</li>
+        <li class="chip">PoC 딜리버리</li>
+      </ul>
+      <div class="btn-row">
+        <a class="btn" href="https://github.com/hwan96-ai" target="_blank" rel="noopener noreferrer">GitHub 프로필 ↗</a>
+        <a class="btn btn-secondary" href="https://github.com/hwan96-ai/korean-tts-benchmark" target="_blank" rel="noopener noreferrer">공개 벤치마크 레포 ↗</a>
+      </div>
+    </div>
+    <p class="principle-strip" role="note">
+      모든 수치는 자체 벤치마크 출처 병기 · 고객사명 익명 · 성공뿐 아니라 탈락·미해결 지표까지 기록
+    </p>
   </section>
 
   <!-- (b) 케이스 카드 그리드 — 상세는 cases/*.html -->
@@ -172,7 +202,8 @@
 <!-- 푸터 -->
 <footer>
   <p>고객사·콜봇 플랫폼·월패드 제조사명은 익명 처리했으며, 모든 성능 수치는 자체 벤치마크 산출물 기준입니다 — 최종 선정 탈락 사실을 포함해 결과를 있는 그대로 기재했습니다.<br>
-  정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)</p>
+  정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)<br>
+  © <a href="https://github.com/hwan96-ai" target="_blank" rel="noopener noreferrer">hwan96-ai</a> — GenAI 케이스 스터디 포트폴리오</p>
 </footer>
 
 <script src="assets/theme.js"></script>

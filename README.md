@@ -2,6 +2,10 @@
 
 브라우저로 열어 보는 케이스 스터디 쇼케이스입니다. 단일 `index.html`(759라인 모놀리식)에서 **조립식(모듈러) 구조**로 재구성했습니다 — 케이스를 추가/교체하기 쉽고, 공유 스타일 한 곳만 고치면 전 페이지에 반영됩니다. 면접 화면공유와 A4 인쇄(@media print)를 함께 고려했습니다.
 
+**포트폴리오 승격 (2026-06-12)**: 사이트 타이틀을 "GenAI 케이스 스터디 포트폴리오"로 승격하고, `index.html`에 소개(About) 섹션(허브 §1 포지셔닝 압축 — 표기는 "GenAI Solutions Consultant (Saltware)"까지만, 실명·연락처 없음) + 전문 영역 칩 + 증거 원칙 스트립 + GitHub 프로필/벤치마크 레포 링크 버튼을 추가했습니다. 외부 링크는 기존 승인 4건 + `github.com/hwan96-ai` 프로필만 허용합니다.
+
+> **공개 배포 (2026-06-12)**: 이 폴더는 공개 레포 `hwan96-ai/genai-case-study-showcase`로 게시되어 GitHub Pages에서 서빙됩니다 — **<https://hwan96-ai.github.io/genai-case-study-showcase/>**. 여기(원본)를 수정하면 공개 레포에도 복사·푸시해야 반영됩니다. 공개 게시 전 체크: 경계 스캐너 clean + 외부 링크는 승인 4건(newswire, korean-tts-benchmark, cardfollow, yeonsung.sapie.ai)만.
+
 ## 구조 (조립식)
 
 ```
@@ -56,10 +60,11 @@ case-study-showcase/
 
 - 외부 CDN·웹폰트·이미지·자동 네트워크 호출이 전혀 없습니다 (시스템 폰트 스택). CSS는 `assets/styles.css` 하나, JS는 `assets/theme.js`(다크모드 토글) 하나뿐입니다.
 - 차트(막대)·스텝퍼·캐시 플로·사다리·게이트는 순수 CSS/HTML로 그렸습니다 — 차트 라이브러리 없음.
-- 외부 링크는 3개뿐이며, 사용자가 직접 클릭할 때만 새 탭(`rel="noopener noreferrer"`)으로 열립니다:
+- 외부 링크는 아래 4건 + `index.html`의 GitHub 프로필(<https://github.com/hwan96-ai>)·벤치마크 레포 버튼뿐이며, 사용자가 직접 클릭할 때만 새 탭(`rel="noopener noreferrer"`)으로 열립니다:
   - A04 운영 배포: <https://cardfollow-preview-hwan.fly.dev/> (SEND_MODE=test 환경 핀 — 발송 불가 · 로그인 계정 필요, 외부 체험 불가 — 운영 배포 증거로만 제시)
   - A02 공개 벤치마크 레포: <https://github.com/hwan96-ai/korean-tts-benchmark>
-  - A07 공개 보도자료: <https://www.newswire.co.kr/newsRead.php?no=1003424> (공개 출시 사실의 공개 근거 — A08은 외부 링크 없음)
+  - A07 공개 보도자료: <https://www.newswire.co.kr/newsRead.php?no=1003424> (공개 출시 사실의 공개 근거)
+  - A08 실서비스: <https://yeonsung.sapie.ai/> (실제 운영 중인 산출물 — 2026-06-11 공개 승인)
 - 라이브 API·LLM·RAG 연결, 원격 저장 기능이 없습니다.
 
 ## 경계
