@@ -32,7 +32,7 @@
       <div class="section-head">
         <h2 id="a07-h">A07 — Sapie Reco 배치 추천 엔진 (idus/backpackr)</h2>
         <span class="badge badge-public">public-candidate</span>
-        <span class="badge badge-role">델리버리 리드 · 총괄 참여</span>
+        <span class="badge badge-role">델리버리 리드 · RAG 코어·PoC 직접 구현</span>
       </div>
       <p class="section-sub">idus(backpackr) 핸드메이드 이커머스 대상 LLM 기반 배치 상품 추천 엔진 —
       Airflow가 오케스트레이션하고 AWS Batch가 분산 실행하는 구조 위에서, Bedrock Claude 모델을 역할별로 계층화해
@@ -40,9 +40,11 @@
 
       <div class="callout honest">
         <strong>역할을 정직하게:</strong> 프로젝트 전체 진행과 아키텍처 방향을 총괄하는
-        <strong>델리버리 리드로 참여</strong>했으며, 구현 커밋의 다수는 동료 엔지니어의 작업입니다.
-        이 페이지는 단독 구현 주장이 아니라, 총괄 참여자로서 시스템 구조와 엔지니어링 결정을
-        설명할 수 있다는 증거로 작성되었습니다.
+        <strong>델리버리 리드(PM)로 참여</strong> — 고객과 매일 스크럼으로 니즈를 반영하고 LLM 추천
+        알고리즘·시즌 테마 생성 방향을 제안·분배했습니다. 동시에 <strong>테마 생성·추천 파이프라인의
+        RAG 코어와 콜드유저(신규 사용자)·판매자 PoC 챗봇 2종은 직접 구현</strong>했습니다.
+        다만 배치 추천 엔진 구현 커밋의 다수는 동료 엔지니어의 작업이므로, 이 페이지는 엔진 전체의
+        단독 구현 주장이 아니라 <strong>총괄 + 위의 직접 구현분</strong>으로 역할을 한정해 설명합니다.
       </div>
 
       <h3>두 개의 DAG <span class="h3-sub">— Airflow 2.10.5(CeleryExecutor)는 스케줄·의존성·재시도만, 무거운 연산은 AWS Batch로 위임</span></h3>
@@ -151,7 +153,7 @@
       <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
       <ul>
         <li><span class="lim-tag">A07 · 정량 성과 미보유</span> — 전환율·CTR 개선 등 성과 지표는 비공개이거나 미보유. 이 페이지는 성과 수치를 주장하지 않습니다.</li>
-        <li><span class="lim-tag">A07 · 역할은 총괄 참여</span> — 구현 기여의 다수는 동료 엔지니어. 본인 기여는 델리버리 총괄·오케스트레이션 관점으로 한정해 서술합니다.</li>
+        <li><span class="lim-tag">A07 · 역할 경계</span> — 배치 추천 엔진 구현 커밋의 다수는 동료 엔지니어. 본인 기여는 델리버리 총괄 + RAG 코어·콜드유저/판매자 PoC 챗봇 2종 직접 구현으로 한정하며, 엔진 전체의 단독 구현은 주장하지 않습니다.</li>
         <li><span class="lim-tag">A07 · 공개 코드 없음</span> — 소스는 비공개 사본 레포로 외부 검증 가능한 공개 코드가 없으며, 출시 사실의 공개 근거는 보도자료입니다.</li>
       </ul>
     </div>
@@ -160,7 +162,7 @@
 </main>
 
 <footer>
-  <p>Sapie Reco·idus(backpackr) 실명은 승인된 공개 범위이며, 정량 성과 수치는 보유하지 않아 주장하지 않습니다 — 역할(총괄 참여)과 공개 근거(보도자료)의 경계를 그대로 기재했습니다.<br>
+  <p>Sapie Reco·idus(backpackr) 실명은 승인된 공개 범위이며, 정량 성과 수치는 보유하지 않아 주장하지 않습니다 — 역할(델리버리 총괄 + RAG 코어·PoC 챗봇 2종 직접 구현)과 공개 근거(보도자료)의 경계를 그대로 기재했습니다.<br>
   정적 로컬 파일 · 외부 네트워크 호출 없음 (링크는 사용자가 직접 클릭할 때만 새 탭으로 열림)</p>
 </footer>
 

@@ -64,7 +64,9 @@
       </div>
       <p class="flow-note">LLM은 두 트랙 공통: Bedrock <strong>Claude Sonnet 4</strong>(inference profile) 메인 +
       Haiku 3.5 폴백/샘플링. 대화 상태는 MongoDB 이력(최근 10턴)을 LangChain 표준 대신
-      커스텀 chat history 클래스로 직접 제어.</p>
+      커스텀 chat history 클래스로 직접 제어.
+      <strong>모델 표기 주의:</strong> 운영 UI 인사말 카피는 "Claude 3.5 기반"으로 남아 있으나,
+      코드 기준 메인 추론 모델은 Claude Sonnet 4입니다 — 카피가 모델 업그레이드 시점에 갱신되지 않은 것입니다.</p>
 
       <h3>문서 인입 파이프라인 <span class="h3-sub">— 입시 요강처럼 표가 핵심인 문서에서 표 구조를 잃지 않는 것이 검색 품질의 전제</span></h3>
       <ol class="stepper">
@@ -150,6 +152,38 @@
         <strong>운영 증거:</strong> 실제 대학(연성대학교) 운영 서비스로 배포·유지보수 중 —
         벡터DB 데이터 업데이트 이력이 코드/커밋에 남아 있어 일회성 PoC가 아닌 운영 사이클의 증거입니다.
       </div>
+
+      <h3>라이브 동작 증거 <span class="h3-sub">— 운영 URL에서 직접 질의한 5종 캡처 (2026-06-18, 개인정보 없는 합성 질문)</span></h3>
+      <div class="case-grid">
+        <article class="case-card">
+          <span class="case-id">qa1 · 정확 검색</span>
+          <h3>수시 2차 원서 접수 기간?</h3>
+          <p>모집요강에서 정확한 날짜를 검색·인용.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">qa2 · 정확 검색</span>
+          <h3>자유전공학과 정원·수업연한?</h3>
+          <p>정원·수업연한·신설연도·위치·학과번호까지 검색.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">qa3 · 정확 검색</span>
+          <h3>연성대학교 위치?</h3>
+          <p>주소·입학홍보처 연락처 검색.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">qa4 · 환각 억제</span>
+          <h3>신입생 장학금 제도?</h3>
+          <p>문서에 근거가 없으면 환각 없이 "확인 불가" + 담당부서 안내 — RAG 정직성.</p>
+        </article>
+        <article class="case-card">
+          <span class="case-id">qa5 · 도메인 가드레일</span>
+          <h3>"오늘 점심 메뉴 추천?"</h3>
+          <p>"답변할 수 없는 질문" + 입학상담만 안내 — 도메인 밖 질문 차단.</p>
+        </article>
+      </div>
+      <p class="flow-note">qa1~qa3은 <strong>정확한 검색</strong>, qa4는 <strong>환각 억제</strong>(근거 없는 답을 지어내지 않음),
+      qa5는 <strong>도메인 가드레일</strong>(입학상담 밖 질문 차단)을 라이브에서 보여줍니다.
+      2026-06-18 합성 질문 라이브 캡처는 비공개 검토 자료로 보관되어 있습니다.</p>
 
       <div class="btn-row">
         <a class="btn" href="https://yeonsung.sapie.ai/" target="_blank" rel="noopener noreferrer">실서비스 바로가기 — 연성대 입학상담 챗봇 ↗</a>
