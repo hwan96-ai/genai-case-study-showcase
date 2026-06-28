@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<title>A04 — CardFollow: 명함 기반 세일즈킷 이메일 에이전트 | GenAI 케이스 스터디 쇼케이스</title>
+<title>CardFollow: 명함 기반 세일즈킷 이메일 에이전트 | GenAI 케이스 스터디 쇼케이스</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -16,7 +16,7 @@
     <span class="brand">GenAI 케이스 스터디 포트폴리오</span>
     <nav class="nav" aria-label="페이지 이동">
       <a href="../index.html">← 쇼케이스 홈</a>
-      <a href="#a04">SEND_MODE 사다리</a>
+      <a href="#send-mode">SEND_MODE 사다리</a>
       <a href="#limits">정직한 한계</a>
     </nav>
     <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드 전환">
@@ -27,10 +27,10 @@
 
 <main id="main">
 
-  <section id="a04" aria-labelledby="a04-h">
+  <section id="send-mode" aria-labelledby="send-mode-h">
     <div class="card">
       <div class="section-head">
-        <h2 id="a04-h">A04 — CardFollow: 명함 기반 세일즈킷 이메일 에이전트</h2>
+        <h2 id="send-mode-h">CardFollow: 명함 기반 세일즈킷 이메일 에이전트</h2>
         <span class="badge badge-interview">interview-only · 운영 배포 증거 (로그인 필요)</span>
       </div>
       <p class="section-sub">명함 사진 → OCR(mock↔gpt-4o-mini Vision) → 사람 검수 → Microsoft Graph 발송 · 3주 단독 풀스택(FastAPI+React/TS, 라우터 10 · 페이지 9)</p>
@@ -99,7 +99,7 @@
         <div class="flow-node resp"><b>가드 코드화</b><small>배치 상한 · 쿨다운을 코드 수준 가드로 반영</small></div>
       </div>
 
-      <ul class="chips" aria-label="A04 검증·운영 증거">
+      <ul class="chips" aria-label="CardFollow 검증·운영 증거">
         <li class="chip"><strong>테스트 함수 236</strong> (기록 201 passed)</li>
         <li class="chip">Playwright e2e <strong>3종</strong></li>
         <li class="chip">2026-05-13 통제된 <strong>1통 실발송 + 409 재전송 차단</strong> 확인</li>
@@ -118,7 +118,7 @@
     <div class="limits">
       <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
       <ul>
-        <li><span class="lim-tag">A04 · 정량 효과 지표 없음</span> — 발송 수치는 통제 테스트 1통 + 행사 사용 일화 수준, 확인 토큰은 in-memory(수평 확장 불가, 의도된 제약).</li>
+        <li><span class="lim-tag">정량 효과 지표 없음</span> — 발송 수치는 통제 테스트 1통 + 행사 사용 일화 수준, 확인 토큰은 in-memory(수평 확장 불가, 의도된 제약).</li>
       </ul>
     </div>
   </section>

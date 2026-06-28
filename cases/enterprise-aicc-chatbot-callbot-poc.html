@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<title>A05/A06 — 대기업 AICC 지원 챗봇 → 콜봇 PoC | GenAI 케이스 스터디 쇼케이스</title>
+<title>대기업 AICC 지원 챗봇 → 콜봇 PoC | GenAI 케이스 스터디 쇼케이스</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -30,7 +30,7 @@
   <section id="flagship" aria-labelledby="flagship-h">
     <div class="card">
       <div class="section-head">
-        <h2 id="flagship-h">A05/A06 — 대기업 AICC 지원 챗봇 → 콜봇 PoC</h2>
+        <h2 id="flagship-h">대기업 AICC 지원 챗봇 → 콜봇 PoC</h2>
         <span class="badge badge-flagship">flagship · interview-first</span>
       </div>
       <p class="section-sub">[대기업 고객사] 6개 벤더 경쟁 PoC · 1차(챗봇)·2차(콜봇) 전 과정 단독 수행 · 크롤링→인덱싱→RAG→평가 하네스→콜봇 API 전환→성능 최적화→납품 문서</p>
@@ -39,7 +39,7 @@
       <ol class="stepper">
         <li class="step">
           <span class="step-dot" aria-hidden="true">1</span>
-          <span class="step-title">1차 챗봇 PoC (A05)</span>
+          <span class="step-title">1차 챗봇 PoC</span>
           <span class="step-desc">지원 문서 243건 크롤링 → 594청크 인덱싱 → 하이브리드 검색(FAISS+BM25 RRF) → LLM 생성 평가셋 714질문+243대화</span>
         </li>
         <li class="step">
@@ -49,7 +49,7 @@
         </li>
         <li class="step">
           <span class="step-dot" aria-hidden="true">3</span>
-          <span class="step-title">2차 콜봇 연동·고도화 (A06)</span>
+          <span class="step-title">2차 콜봇 연동·고도화</span>
           <span class="step-desc">스트리밍 → 동기 JSON 5초 SLA 재설계: 3단계 캐시 + 2-Track 생성, 선정된 2개 벤더가 진행</span>
         </li>
         <li class="step">
@@ -180,11 +180,11 @@
     <div class="limits">
       <h2 id="limits-h">정직한 한계 — 숨기지 않습니다</h2>
       <ul>
-        <li><span class="lim-tag">A05/A06 · URL 정답률</span> — 측정 회차별 10→60→20→0%로 불안정, 최종 벤치마크에서 0%. 끝내 해결하지 못한 지표.</li>
-        <li><span class="lim-tag">A05/A06 · Cold 5초 미달</span> — v3.2 Cold 단독 중앙값 10.93s. “5초 이내”는 캐시·프리웜 경로 기준이며 프리웜 커버리지에 의존.</li>
-        <li><span class="lim-tag">A05/A06 · 합성 평가셋</span> — 평가 질문·대화 전부 LLM 생성(실 콜 데이터 부재), STT 오류 패턴이 보정 규칙과 동일 출처라 과대평가 가능성.</li>
-        <li><span class="lim-tag">A05/A06 · 샘플 크기</span> — 정확도 30샘플(96.7%=29/30), 멀티턴 20개 — 신뢰구간 넓음.</li>
-        <li><span class="lim-tag">A05/A06 · 지표 정의 변화</span> — 44.63%(Hit@1)와 96.7%(응답 관련성)는 동일 지표 간 비교가 아님.</li>
+        <li><span class="lim-tag">URL 정답률</span> — 측정 회차별 10→60→20→0%로 불안정, 최종 벤치마크에서 0%. 끝내 해결하지 못한 지표.</li>
+        <li><span class="lim-tag">Cold 5초 미달</span> — v3.2 Cold 단독 중앙값 10.93s. “5초 이내”는 캐시·프리웜 경로 기준이며 프리웜 커버리지에 의존.</li>
+        <li><span class="lim-tag">합성 평가셋</span> — 평가 질문·대화 전부 LLM 생성(실 콜 데이터 부재), STT 오류 패턴이 보정 규칙과 동일 출처라 과대평가 가능성.</li>
+        <li><span class="lim-tag">샘플 크기</span> — 정확도 30샘플(96.7%=29/30), 멀티턴 20개 — 신뢰구간 넓음.</li>
+        <li><span class="lim-tag">지표 정의 변화</span> — 44.63%(Hit@1)와 96.7%(응답 관련성)는 동일 지표 간 비교가 아님.</li>
       </ul>
     </div>
   </section>

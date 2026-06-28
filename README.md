@@ -15,18 +15,18 @@ case-study-showcase/
 │   ├── styles.css              ← 모든 페이지가 공유하는 단일 스타일시트 (테마 변수·차트·표·인쇄 포함)
 │   └── theme.js                ← 다크/라이트 토글 (모든 페이지 공유, JS는 이것 하나뿐)
 ├── cases/
-│   ├── a05-a06-aicc.html       ← A05/A06 대기업 AICC 챗봇→콜봇 PoC (타임라인·차트·캐시 플로 + 해당 한계)
-│   ├── a02-tts.html            ← A02 한국어 TTS 평가 기준 설계 (6모델 비교 표 + 해당 한계)
-│   ├── a03-braille.html        ← A03 Sapie-Braille 에이전트 확장
-│   ├── a04-cardfollow.html     ← A04 CardFollow (SEND_MODE 사다리·7중 게이트 + 해당 한계)
-│   ├── a07-sapie-reco.html     ← A07 Sapie Reco 배치 추천 엔진 (DAG 플로·모델 비용 계층화 차트·실패 복원력 + 해당 한계)
-│   └── a08-yeonsung.html       ← A08 공개 교육기관 입학상담 챗봇 백엔드 (이중 RAG 트랙·문서 인입 스텝퍼·운영 디테일 + 해당 한계)
+│   ├── enterprise-aicc-chatbot-callbot-poc.html   ← 대기업 AICC 챗봇→콜봇 PoC (타임라인·차트·캐시 플로 + 해당 한계)
+│   ├── korean-tts-evaluation.html                 ← 한국어 TTS 평가 기준 설계 (6모델 비교 표 + 해당 한계)
+│   ├── sapie-braille-agent-extension.html         ← Sapie-Braille 에이전트 확장
+│   ├── cardfollow-email-agent.html                ← CardFollow (SEND_MODE 사다리·7중 게이트 + 해당 한계)
+│   ├── sapie-reco-batch-recommendation.html       ← Sapie Reco 배치 추천 엔진 (DAG 플로·모델 비용 계층화 차트·실패 복원력 + 해당 한계)
+│   └── public-education-admissions-chatbot.html   ← 공개 교육기관 입학상담 챗봇 백엔드 (이중 RAG 트랙·문서 인입 스텝퍼·운영 디테일 + 해당 한계)
 └── README.md
 ```
 
 - `index.html`은 케이스별 심층 내용을 갖지 않습니다. 케이스마다 제목·한 줄 결과·핵심 수치 2~3개를 담은 요약 카드만 있고, 카드가 `cases/*.html` 상세 페이지로 연결됩니다.
-- 기존 "정직한 한계" 항목은 각 케이스 상세 페이지로 분배했습니다 (A05/A06 5개 항목 → aicc 페이지, A02 1개 → tts 페이지, A04 1개 → cardfollow 페이지). A07·A08도 각 페이지에 자체 한계 스트립을 갖습니다 (정량 성과 미보유 등).
-- A07 상세 페이지의 실제 역할 배지는 "델리버리 리드 · RAG 코어·PoC 직접 구현"입니다 (구현 다수는 동료 — 단독 수행 표현 금지). A08은 "단독 설계·구현·운영 배포"로 표기하되 공개 표시명은 승인 메타데이터가 갱신될 때까지 `공개 교육기관`으로 통일합니다.
+- 기존 "정직한 한계" 항목은 각 케이스 상세 페이지로 분배했습니다. Sapie Reco와 공개 교육기관 챗봇도 각 페이지에 자체 한계 스트립을 갖습니다 (정량 성과 미보유 등).
+- Sapie Reco 상세 페이지의 실제 역할 배지는 "델리버리 리드 · RAG 코어·PoC 직접 구현"입니다 (구현 다수는 동료 — 단독 수행 표현 금지). 공개 교육기관 챗봇은 "단독 설계·구현·운영 배포"로 표기하되 공개 표시명은 승인 메타데이터가 갱신될 때까지 `공개 교육기관`으로 통일합니다.
 
 ## 열람 방법
 
@@ -37,9 +37,9 @@ case-study-showcase/
 
 ## 새 케이스 페이지 추가 방법
 
-1. `cases/` 아래에서 구조가 비슷한 기존 페이지 하나를 복사합니다 (예: 표 중심이면 `a02-tts.html`, 카드 한 장이면 `a03-braille.html`).
+1. `cases/` 아래에서 구조가 비슷한 기존 페이지 하나를 복사합니다 (예: 표 중심이면 `korean-tts-evaluation.html`, 카드 한 장이면 `sapie-braille-agent-extension.html`).
 2. 복사본에서 `<title>`, 본문 섹션 내용, (있다면) 해당 케이스의 "정직한 한계" 항목을 교체합니다. 스타일시트 링크(`../assets/styles.css`)와 테마 스크립트(`../assets/theme.js`)는 그대로 둡니다.
-3. `index.html`의 `#cases` 그리드에 요약 카드(`<a class="case-card" href="cases/새파일.html">`)를 추가합니다 — 제목 + 한 줄 결과 + 핵심 수치 2~3개. 준비가 덜 됐으면 `class="case-card placeholder"` + `badge-pending`으로 "준비 중" 카드만 먼저 둡니다.
+3. `index.html`의 `#cases` 그리드에 요약 카드를 추가하고, `href`는 설명형 slug를 가진 실제 상세 페이지로 연결합니다 — 제목 + 한 줄 결과 + 핵심 수치 2~3개. 준비가 덜 됐으면 `class="case-card placeholder"` + `badge-pending`으로 "준비 중" 카드만 먼저 둡니다.
 4. 모든 사실·수치는 승인된 공개 범위와 검증 가능한 public-safe 초안에서만 가져오고, 미승인 실명·내부 엔드포인트·원시 로그는 넣지 않습니다.
 
 ## 데이터 출처
@@ -47,18 +47,18 @@ case-study-showcase/
 - 모든 사실·수치는 승인된 공개 범위와 검증 가능한 public-safe 초안·증거 패키지에서 가져오는 것이 원칙입니다. 승인·scan 기록을 재현할 수 없는 항목은 다음 publish 전에 미검증으로 처리합니다.
 - 공개 README에는 내부 작업 경로나 비공개 파일명을 기록하지 않습니다. 출처 추적이 필요하면 공개 저장소 밖의 비공개 승인 기록에서 공개 허용 여부만 확인합니다.
 - 성능 수치는 전부 자체 벤치마크 산출물 기준이며, 지표 정의가 바뀌는 구간(Hit@1 vs 응답 관련성)은 차트 각주로 병기했습니다.
-- A05/A06의 비즈니스 결과는 "최종 선정 탈락"이 사실이며 그대로 표기했습니다. 수주/도입 성공 표현은 사용하지 않습니다.
-- A07·A08은 정량 성과 지표를 보유하지 않으므로 어떤 성과 수치도 적지 않았습니다 (수치 칩은 전부 설계 파라미터: 배치 사이즈, 타임아웃, 청킹 등).
+- 대기업 AICC PoC의 비즈니스 결과는 "최종 선정 탈락"이 사실이며 그대로 표기했습니다. 수주/도입 성공 표현은 사용하지 않습니다.
+- Sapie Reco와 공개 교육기관 챗봇은 정량 성과 지표를 보유하지 않으므로 어떤 성과 수치도 적지 않았습니다 (수치 칩은 전부 설계 파라미터: 배치 사이즈, 타임아웃, 청킹 등).
 
 ## 기술 노트 (외부 호출 없음)
 
 - 외부 CDN·웹폰트·이미지·자동 네트워크 호출이 전혀 없습니다 (시스템 폰트 스택). CSS는 `assets/styles.css` 하나, JS는 `assets/theme.js`(다크모드 토글) 하나뿐입니다.
 - 차트(막대)·스텝퍼·캐시 플로·사다리·게이트는 순수 CSS/HTML로 그렸습니다 — 차트 라이브러리 없음.
-- 외부 링크는 아래 4건 + `index.html`의 GitHub 프로필(<https://github.com/hwan96-ai>)·벤치마크 레포 버튼뿐이며, 사용자가 직접 클릭할 때만 새 탭(`rel="noopener noreferrer"`)으로 열립니다:
-  - A04 운영 배포: <https://cardfollow-preview-hwan.fly.dev/> (SEND_MODE=test 환경 핀 — 발송 불가 · 로그인 계정 필요, 외부 체험 불가 — 운영 배포 증거로만 제시)
-  - A02 공개 벤치마크 레포: <https://github.com/hwan96-ai/korean-tts-benchmark>
-  - A07 공개 보도자료: <https://www.newswire.co.kr/newsRead.php?no=1003424> (공개 출시 사실의 공개 근거)
-  - A08 실서비스: <https://yeonsung.sapie.ai/> (실제 운영 중인 공개 endpoint. 조직 표시명은 익명화 유지)
+- 외부 링크는 아래 3건 + `index.html`의 GitHub 프로필(<https://github.com/hwan96-ai>)·벤치마크 레포 버튼뿐이며, 사용자가 직접 클릭할 때만 새 탭(`rel="noopener noreferrer"`)으로 열립니다:
+  - CardFollow 운영 배포: <https://cardfollow-preview-hwan.fly.dev/> (SEND_MODE=test 환경 핀 — 발송 불가 · 로그인 계정 필요, 외부 체험 불가 — 운영 배포 증거로만 제시)
+  - 한국어 TTS 공개 벤치마크 레포: <https://github.com/hwan96-ai/korean-tts-benchmark>
+  - Sapie Reco 공개 보도자료: <https://www.newswire.co.kr/newsRead.php?no=1003424> (공개 출시 사실의 공개 근거)
+  - 공개 교육기관 챗봇 운영 URL은 익명화 정책에 따라 공개 저장소에 직접 기재하지 않습니다.
 - 라이브 API·LLM·RAG 연결, 원격 저장 기능이 없습니다.
 
 ## 경계

@@ -366,7 +366,7 @@ a.case-card:hover h3 { color: var(--accent-strong); }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
 .btn-note { font-size: .8rem; color: var(--muted); }
 
-/* ============ 역할 배지 + 비교 컬럼 (A07/A08 추가 — 기존 페이지에 영향 없음) ============ */
+/* ============ 역할 배지 + 비교 컬럼 (상세 페이지 확장 — 기존 페이지에 영향 없음) ============ */
 .badge-role { background: var(--violet-soft); color: var(--violet); border: 1px solid var(--violet); }
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
 @media (max-width: 820px) { .compare-grid { grid-template-columns: 1fr; } }
