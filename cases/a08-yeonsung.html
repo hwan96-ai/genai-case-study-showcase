@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<title>A08 — public organization 입학상담 챗봇 백엔드 | GenAI 케이스 스터디 쇼케이스</title>
+<title>A08 — 공개 교육기관 입학상담 챗봇 백엔드 | GenAI 케이스 스터디 쇼케이스</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232456b8'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -30,11 +30,11 @@
   <section id="tracks" aria-labelledby="a08-h">
     <div class="card">
       <div class="section-head">
-        <h2 id="a08-h">A08 — public organization 입학상담 챗봇 + SAPiE 멀티테넌트 RAG 백엔드</h2>
+        <h2 id="a08-h">A08 — 공개 교육기관 입학상담 챗봇 + SAPiE 멀티테넌트 RAG 백엔드</h2>
         <span class="badge badge-public">public-candidate</span>
         <span class="badge badge-role">단독 설계·구현·운영 배포</span>
       </div>
-      <p class="section-sub">카카오 i 채널로 연동된 public organization 입학상담 챗봇과 사내 SAPiE 멀티테넌트 챗봇 플랫폼의
+      <p class="section-sub">카카오 i 채널로 연동된 공개 교육기관 입학상담 챗봇과 사내 SAPiE 멀티테넌트 챗봇 플랫폼의
       FastAPI 백엔드 전체를 커밋 이력 기준 <strong>단독으로 설계·구현·운영</strong> —
       트랙별로 다른 임베딩/벡터스토어 전략, HWP까지 포함한 테이블 인지 문서 파이프라인,
       SSE 스트리밍·비용 추적 같은 운영 디테일을 갖춘 실제 대학 운영 RAG 서비스입니다.</p>
@@ -42,7 +42,7 @@
       <h3>이중 RAG 트랙 <span class="h3-sub">— 같은 시스템 안에서 트랙별로 다른 임베딩·벡터스토어 전략</span></h3>
       <div class="compare-grid">
         <div class="compare-col">
-          <span class="compare-tag">public organization 트랙 — 단일 도메인 코퍼스</span>
+          <span class="compare-tag">공개 교육기관 트랙 — 단일 도메인 코퍼스</span>
           <h4>VoyageAI <code>voyage-3-large</code> + FAISS MMR 검색</h4>
           <ul>
             <li>검색: FAISS <strong>MMR (k=3, fetch_k=20)</strong> — 단일 도메인 코퍼스에 검색 다양성 적용</li>
@@ -130,7 +130,7 @@
         <article class="case-card">
           <span class="case-id">비용 가시성</span>
           <h3>비용 추적 콜백 3종 + 월별 롤업</h3>
-          <p>토큰 단위 비용 추적 콜백 3종(연성/카카오/웹 채널별) + 사용자·월별 비용 롤업 —
+          <p>토큰 단위 비용 추적 콜백 3종(교육기관/카카오/웹 채널별) + 사용자·월별 비용 롤업 —
           멀티테넌트에서 "누가 얼마 쓰는지"를 처음부터 계측.</p>
         </article>
       </div>
@@ -149,7 +149,7 @@
       </div>
 
       <div class="callout">
-        <strong>운영 증거:</strong> 실제 대학(public organization) 운영 서비스로 배포·유지보수 중 —
+        <strong>운영 증거:</strong> 공개 교육기관 운영 서비스로 배포·유지보수 중 —
         벡터DB 데이터 업데이트 이력이 코드/커밋에 남아 있어 일회성 PoC가 아닌 운영 사이클의 증거입니다.
       </div>
 
@@ -167,7 +167,7 @@
         </article>
         <article class="case-card">
           <span class="case-id">qa3 · 정확 검색</span>
-          <h3>public organization 위치?</h3>
+          <h3>교육기관 위치?</h3>
           <p>주소·입학홍보처 연락처 검색.</p>
         </article>
         <article class="case-card">
@@ -186,7 +186,7 @@
       캡처 원본은 내부 증거 패키지(<code>repo-grounded/evidence/a08/</code>)에 보관되어 있습니다.</p>
 
       <div class="btn-row">
-        <a class="btn" href="https://yeonsung.sapie.ai/" target="_blank" rel="noopener noreferrer">실서비스 바로가기 — public organization 입학상담 챗봇 ↗</a>
+        <a class="btn" href="https://yeonsung.sapie.ai/" target="_blank" rel="noopener noreferrer">실서비스 바로가기 — 공개 교육기관 입학상담 챗봇 ↗</a>
         <span class="btn-note">실제 운영 중인 산출물 — 방문 가능 (승인된 공개 URL · 이 페이지의 유일한 외부 링크)</span>
       </div>
 
@@ -208,7 +208,7 @@
 </main>
 
 <footer>
-  <p>public organization·SAPiE·카카오 i와 운영 URL(https://yeonsung.sapie.ai/ — 이 1건만 승인 예외)은 승인된 공개 범위이며, 그 외 엔드포인트·키·버킷명 등 내부 식별자는 포함하지 않습니다 — 정량 성과 수치는 보유하지 않아 주장하지 않습니다.<br>
+  <p>공개 교육기관·SAPiE·카카오 i와 운영 URL은 공개 surface에서 사용하는 최소 식별 범위이며, 조직 실명·그 외 엔드포인트·키·버킷명 등 내부 식별자는 포함하지 않습니다 — 정량 성과 수치는 보유하지 않아 주장하지 않습니다.<br>
   정적 로컬 파일 · 외부 네트워크 호출 없음 · 외부 링크는 승인된 실서비스 링크 1건뿐입니다</p>
 </footer>
 
